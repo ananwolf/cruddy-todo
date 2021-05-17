@@ -10,10 +10,11 @@ var counter = 0;
 // If you don't know what a zero-padded number is, read the
 // Wikipedia entry on Leading Zeros and check out some of code links:
 // https://www.google.com/search?q=what+is+a+zero+padded+number%3F
+//'%05d' basically sets the format for an integer. d stands for digit. It means set the input to 5 digits (no decimal places) and pad with leading zeros as required to make the output 5 digits.
 
 const zeroPaddedNumber = (num) => {
   return sprintf('%05d', num);
-};
+}; // so that we have the id number like this 00001
 
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
@@ -24,6 +25,7 @@ const readCounter = (callback) => {
     }
   });
 };
+
 
 const writeCounter = (count, callback) => {
   var counterString = zeroPaddedNumber(count);
@@ -38,11 +40,41 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
-};
+// I: callback function
+// O: read & write counters
+// C: error-first callbacks
+// E:
+// exports.getNextUniqueId = (callback) => {
+//   readCounter((err, data) => err
+//   ? callback(null, 0)
+//   : writeCounter(data + 1, (err, counterString) => err
+//     ? throw (`418 I'm a teapot`)
+//     : callback(null, counterString)));
+// };
 
+exports.getNextUniqueId = (callback) => {
+  // invoke readCounter with error, data
+  readCounter( (err, data) => {
+    // if error occurs
+    if (err) {
+      // run callback on null, 0
+      callback(null, 0);
+    } else {
+    // invoke writeCounter with data + 1,    //function (error, counterString)
+    writeCounter(data + 1,(err, counterString) => {
+      // if error
+      if (err) {
+        throw (`418, I'm a teapot`);
+      // THROW error!
+      // else
+      } else {
+        // run callback on null, counterString
+        callback(null, counterString);
+      }
+    });
+    }
+  });
+}
 
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////

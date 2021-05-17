@@ -4,6 +4,7 @@ const _ = require('underscore');
 const counter = require('./counter');
 
 var items = {};
+//{'00001': 'visit mom'}
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
@@ -35,6 +36,7 @@ exports.update = (id, text, callback) => {
     callback(new Error(`No item with id: ${id}`));
   } else {
     items[id] = text;
+//overwrite the item with new text value
     callback(null, { id, text });
   }
 };
