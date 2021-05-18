@@ -44,13 +44,6 @@ const writeCounter = (count, callback) => {
 // O: read & write counters
 // C: error-first callbacks
 // E:
-// exports.getNextUniqueId = (callback) => {
-//   readCounter((err, data) => err
-//   ? callback(null, 0)
-//   : writeCounter(data + 1, (err, counterString) => err
-//     ? throw (`418 I'm a teapot`)
-//     : callback(null, counterString)));
-// };
 
 exports.getNextUniqueId = (callback) => {
   // invoke readCounter with error, data
@@ -64,8 +57,8 @@ exports.getNextUniqueId = (callback) => {
     writeCounter(data + 1,(err, counterString) => {
       // if error
       if (err) {
+        // THROW error!
         throw (`418, I'm a teapot`);
-      // THROW error!
       // else
       } else {
         // run callback on null, counterString
